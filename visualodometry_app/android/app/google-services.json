@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1080851371364",
+    "project_id": "visualodometryapp",
+    "storage_bucket": "visualodometryapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1080851371364:android:2223c7e454121b289ad671",
+        "android_client_info": {
+          "package_name": "com.example.visualodometry_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1080851371364-lv9f0k38lv9iv2ug4mpsc0c297h9mber.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMJMMfVxnZa-HtDLo3fNNfE3Op4saSda4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1080851371364-lv9f0k38lv9iv2ug4mpsc0c297h9mber.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
