@@ -39,7 +39,8 @@ class _MyAppState extends State<MyApp> {
   Vector3 _absoluteOrientation2 = Vector3.zero();
   double? _screenOrientation = 0;
 
-  int? _groupValue = 0;
+  int? _groupValue = 3;
+  int? _currInterval = 16666;
 
   @override
   //Functions for sensor
@@ -98,6 +99,7 @@ class _MyAppState extends State<MyApp> {
     motionSensors.absoluteOrientationUpdateInterval = interval;
     setState(() {
       _groupValue = groupValue;
+      _currInterval = interval;
     });
   }
 
@@ -176,10 +178,19 @@ class _MyAppState extends State<MyApp> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.push(context,
-              CupertinoPageRoute(builder: (context) => const CameraPage()));
+          // Navigator.push(
+          //     context,
+          //     CupertinoPageRoute(builder: (context) => const CameraPage()));
+          _currInterval = (_currInterval == 0 || _currInterval == null
+              ? 16666
+              : _currInterval);
+          _groupValue =
+              (_groupValue == 0 || _groupValue == null ? 3 : _groupValue);
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => CameraPage(
+                  groupValue: _groupValue!, interval: _currInterval!)));
         },
-        label: const Text('Start'),
+        label: const Text('Capture Video'),
       ),
     );
   }

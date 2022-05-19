@@ -47,6 +47,7 @@ dependencies:
   motion_sensors: ^0.1.0
   vector_math: ^2.1.2
   icon_decoration: ^1.0.1
+  intl: ^0.17.0
 
 # dependency_overrides:
 #   peter_flutter_camera:

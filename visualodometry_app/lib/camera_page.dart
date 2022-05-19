@@ -7,9 +7,12 @@ import 'package:visualodometry_app/storage_service.dart';
 /*Resources:
 https://www.youtube.com/watch?v=-p9ir46omGo&ab_channel=DestinyEd
 */
-
+//ignore: must_be_immutable
 class CameraPage extends StatefulWidget {
-  const CameraPage({Key? key}) : super(key: key);
+  int interval;
+  int groupValue;
+  CameraPage({Key? key, required this.interval, required this.groupValue})
+      : super(key: key);
 
   @override
   _CameraPageState createState() => _CameraPageState();
@@ -19,20 +22,11 @@ class _CameraPageState extends State<CameraPage> {
   @override
   Widget build(BuildContext context) {
     return FlutterCamera(
+      //Sensor
+      interval: widget.interval,
+      groupValue: widget.groupValue,
+      //Camera stuff
       color: Color.fromARGB(100, 0, 0, 0),
-      onImageCaptured: (value) {
-        final path = value.path;
-        print("::::::::::::::::::::::::::::::::: $path");
-        if (path.contains('.jpg')) {
-          showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  content: Image.file(File(path)),
-                );
-              });
-        }
-      },
       onVideoRecorded: (value) async {
         final path = value.path;
         final Storage storage = Storage();
