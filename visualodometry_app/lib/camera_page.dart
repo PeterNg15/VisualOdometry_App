@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_camera/flutter_camera.dart';
+// import 'package:flutter_camera/flutter_camera.dart';
+import 'package:peter_flutter_camera/peter_flutter_camera.dart';
 import 'package:visualodometry_app/storage_service.dart';
 
 /*Resources:
@@ -18,7 +19,7 @@ class _CameraPageState extends State<CameraPage> {
   @override
   Widget build(BuildContext context) {
     return FlutterCamera(
-      color: Colors.amber,
+      color: Color.fromARGB(100, 0, 0, 0),
       onImageCaptured: (value) {
         final path = value.path;
         print("::::::::::::::::::::::::::::::::: $path");
@@ -32,13 +33,13 @@ class _CameraPageState extends State<CameraPage> {
               });
         }
       },
-      onVideoRecorded: (value) async{
+      onVideoRecorded: (value) async {
         final path = value.path;
         final Storage storage = Storage();
-        storage.uploadFile(path, value.name).then((value) => print('Done'));        
+        storage.uploadFile(path, value.name).then((value) => print('Done'));
         print('::::::::::::::::::::::::;; dkdkkd $path');
+
         ///Show video preview .mp4
-        
       },
     );
     // return Container();

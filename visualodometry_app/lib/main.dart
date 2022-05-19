@@ -5,7 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:motion_sensors/motion_sensors.dart';
 import 'package:vector_math/vector_math_64.dart' hide Colors;
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(const App());
@@ -21,14 +21,14 @@ class App extends StatelessWidget {
   }
 }
 
-class MyApp extends StatefulWidget{
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp>{
+class _MyAppState extends State<MyApp> {
   //Variables for the sensor
   Vector3 _accelerometer = Vector3.zero();
   Vector3 _magnetometer = Vector3.zero();
@@ -36,7 +36,7 @@ class _MyAppState extends State<MyApp>{
   Vector3 _gyroscope = Vector3.zero();
   Vector3 _orientation = Vector3.zero();
   Vector3 _absoluteOrientation = Vector3.zero();
-  Vector3 _absoluteOrientation2 = Vector3.zero();  
+  Vector3 _absoluteOrientation2 = Vector3.zero();
   double? _screenOrientation = 0;
 
   int? _groupValue = 0;
@@ -63,7 +63,8 @@ class _MyAppState extends State<MyApp>{
     motionSensors.magnetometer.listen((MagnetometerEvent event) {
       setState(() {
         _magnetometer.setValues(event.x, event.y, event.z);
-        var matrix = motionSensors.getRotationMatrix(_accelerometer, _magnetometer);
+        var matrix =
+            motionSensors.getRotationMatrix(_accelerometer, _magnetometer);
         _absoluteOrientation2.setFrom(motionSensors.getOrientation(matrix));
       });
     });
@@ -101,83 +102,85 @@ class _MyAppState extends State<MyApp>{
   }
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const Text('Update Interval'),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Radio(
-                    value: 1,
-                    groupValue: _groupValue,
-                    onChanged: (dynamic value) => setUpdateInterval(value, Duration.microsecondsPerSecond ~/ 1),
-                  ),
-                  const Text("1 FPS"),
-                  Radio(
-                    value: 2,
-                    groupValue: _groupValue,
-                    onChanged: (dynamic value) => setUpdateInterval(value, Duration.microsecondsPerSecond ~/ 30),
-                  ),
-                  const Text("30 FPS"),
-                  Radio(
-                    value: 3,
-                    groupValue: _groupValue,
-                    onChanged: (dynamic value) => setUpdateInterval(value, Duration.microsecondsPerSecond ~/ 60),
-                  ),
-                  const Text("60 FPS"),
-                ],
-              ),
-              const Text('Gyroscope'),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Text('${_gyroscope.x.toStringAsFixed(4)}'),
-                  Text('${_gyroscope.y.toStringAsFixed(4)}'),
-                  Text('${_gyroscope.z.toStringAsFixed(4)}'),
-                ],
-              ),
-              const Text('Orientation'),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Text('${degrees(_orientation.x).toStringAsFixed(4)}'),
-                  Text('${degrees(_orientation.y).toStringAsFixed(4)}'),
-                  Text('${degrees(_orientation.z).toStringAsFixed(4)}'),
-                ],
-              ),
-              const Text('Absolute Orientation'),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Text('${degrees(_absoluteOrientation.x).toStringAsFixed(4)}'),
-                  Text('${degrees(_absoluteOrientation.y).toStringAsFixed(4)}'),
-                  Text('${degrees(_absoluteOrientation.z).toStringAsFixed(4)}'),
-                ],
-              ),
-              const Text('Orientation (accelerometer + magnetometer)'),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Text('${degrees(_absoluteOrientation2.x).toStringAsFixed(4)}'),
-                  Text('${degrees(_absoluteOrientation2.y).toStringAsFixed(4)}'),
-                  Text('${degrees(_absoluteOrientation2.z).toStringAsFixed(4)}'),
-                ],
-              ),
-            ],
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Text('Update Interval'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Radio(
+                  value: 1,
+                  groupValue: _groupValue,
+                  onChanged: (dynamic value) => setUpdateInterval(
+                      value, Duration.microsecondsPerSecond ~/ 1),
+                ),
+                const Text("1 FPS"),
+                Radio(
+                  value: 2,
+                  groupValue: _groupValue,
+                  onChanged: (dynamic value) => setUpdateInterval(
+                      value, Duration.microsecondsPerSecond ~/ 30),
+                ),
+                const Text("30 FPS"),
+                Radio(
+                  value: 3,
+                  groupValue: _groupValue,
+                  onChanged: (dynamic value) => setUpdateInterval(
+                      value, Duration.microsecondsPerSecond ~/ 60),
+                ),
+                const Text("60 FPS"),
+              ],
+            ),
+            const Text('Gyroscope'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Text('${_gyroscope.x.toStringAsFixed(4)}'),
+                Text('${_gyroscope.y.toStringAsFixed(4)}'),
+                Text('${_gyroscope.z.toStringAsFixed(4)}'),
+              ],
+            ),
+            const Text('Orientation'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Text('${degrees(_orientation.x).toStringAsFixed(4)}'),
+                Text('${degrees(_orientation.y).toStringAsFixed(4)}'),
+                Text('${degrees(_orientation.z).toStringAsFixed(4)}'),
+              ],
+            ),
+            const Text('Absolute Orientation'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Text('${degrees(_absoluteOrientation.x).toStringAsFixed(4)}'),
+                Text('${degrees(_absoluteOrientation.y).toStringAsFixed(4)}'),
+                Text('${degrees(_absoluteOrientation.z).toStringAsFixed(4)}'),
+              ],
+            ),
+            const Text('Orientation (accelerometer + magnetometer)'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Text('${degrees(_absoluteOrientation2.x).toStringAsFixed(4)}'),
+                Text('${degrees(_absoluteOrientation2.y).toStringAsFixed(4)}'),
+                Text('${degrees(_absoluteOrientation2.z).toStringAsFixed(4)}'),
+              ],
+            ),
+          ],
         ),
+      ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: (){
-          Navigator.push(context, CupertinoPageRoute(builder: (context) => const CameraPage()));
-        }, 
+        onPressed: () {
+          Navigator.push(context,
+              CupertinoPageRoute(builder: (context) => const CameraPage()));
+        },
         label: const Text('Start'),
       ),
     );
   }
 }
-
-

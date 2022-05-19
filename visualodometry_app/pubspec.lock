@@ -146,13 +146,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_camera:
-    dependency: "direct main"
-    description:
-      name: flutter_camera
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.1"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -191,6 +184,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.0"
+  icon_decoration:
+    dependency: "direct main"
+    description:
+      name: icon_decoration
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
   image_gallery_saver:
     dependency: "direct main"
     description:
@@ -296,6 +296,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.6"
+  peter_flutter_camera:
+    dependency: "direct main"
+    description:
+      path: "packages/peter_flutter_camera"
+      relative: true
+    source: path
+    version: "0.1.1"
   platform:
     dependency: transitive
     description:
