@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:visualodometry_app/camera_page.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -17,7 +16,7 @@ class App extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: MyApp());
+    return const MaterialApp(home: MyApp());
   }
 }
 
@@ -106,11 +105,15 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Computer Vision Laboratory'),
+        backgroundColor: Colors.redAccent,
+      ),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text('Update Interval'),
+            const Text('Refresh Rate'),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -141,36 +144,36 @@ class _MyAppState extends State<MyApp> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                Text('${_gyroscope.x.toStringAsFixed(4)}'),
-                Text('${_gyroscope.y.toStringAsFixed(4)}'),
-                Text('${_gyroscope.z.toStringAsFixed(4)}'),
+                Text(_gyroscope.x.toStringAsFixed(4)),
+                Text(_gyroscope.y.toStringAsFixed(4)),
+                Text(_gyroscope.z.toStringAsFixed(4)),
               ],
             ),
             const Text('Orientation'),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                Text('${degrees(_orientation.x).toStringAsFixed(4)}'),
-                Text('${degrees(_orientation.y).toStringAsFixed(4)}'),
-                Text('${degrees(_orientation.z).toStringAsFixed(4)}'),
+                Text(degrees(_orientation.x).toStringAsFixed(4)),
+                Text(degrees(_orientation.y).toStringAsFixed(4)),
+                Text(degrees(_orientation.z).toStringAsFixed(4)),
               ],
             ),
             const Text('Absolute Orientation'),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                Text('${degrees(_absoluteOrientation.x).toStringAsFixed(4)}'),
-                Text('${degrees(_absoluteOrientation.y).toStringAsFixed(4)}'),
-                Text('${degrees(_absoluteOrientation.z).toStringAsFixed(4)}'),
+                Text(degrees(_absoluteOrientation.x).toStringAsFixed(4)),
+                Text(degrees(_absoluteOrientation.y).toStringAsFixed(4)),
+                Text(degrees(_absoluteOrientation.z).toStringAsFixed(4)),
               ],
             ),
             const Text('Orientation (accelerometer + magnetometer)'),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                Text('${degrees(_absoluteOrientation2.x).toStringAsFixed(4)}'),
-                Text('${degrees(_absoluteOrientation2.y).toStringAsFixed(4)}'),
-                Text('${degrees(_absoluteOrientation2.z).toStringAsFixed(4)}'),
+                Text(degrees(_absoluteOrientation2.x).toStringAsFixed(4)),
+                Text(degrees(_absoluteOrientation2.y).toStringAsFixed(4)),
+                Text(degrees(_absoluteOrientation2.z).toStringAsFixed(4)),
               ],
             ),
           ],
