@@ -8,6 +8,7 @@ import 'package:visualodometry_app/storage_service.dart';
 /*Resources:
 https://www.youtube.com/watch?v=-p9ir46omGo&ab_channel=DestinyEd
 */
+
 //ignore: must_be_immutable
 class CameraPage extends StatefulWidget {
   int interval;
@@ -37,7 +38,7 @@ class _CameraPageState extends State<CameraPage> {
       interval: widget.interval,
       groupValue: widget.groupValue,
       //Camera stuff
-      color: const Color.fromARGB(100, 0, 0, 0),
+      color: Color.fromARGB(104, 0, 0, 0),
       onVideoRecorded: (value, csvPath) async {
         print("test");
         final path = value.path;
@@ -46,10 +47,9 @@ class _CameraPageState extends State<CameraPage> {
         // print('::::::::::::::::::::::::;; dkdkkd $path');
         //Delete file afterwards
         deleteFile(File(value.path));
-        deleteFile(File(csvPath));
+        // deleteFile(File(csvPath));
 
-        // dispose();
-
+        //dispose();
         ///Show video preview .mp4
       },
     );
