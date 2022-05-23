@@ -1,14 +1,129 @@
+import 'dart:html' as html;
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:visualodometry_app/camera_page.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'package:motion_sensors/motion_sensors.dart';
 import 'package:vector_math/vector_math_64.dart' hide Colors;
+import 'package:flutter/foundation.dart'
+    show consolidateHttpClientResponseBytes, kIsWeb;
+import 'package:visualodometry_app/storage_service.dart';
+
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:intl/intl.dart';
+
+import 'dart:js' as js;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(const App());
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  if (!kIsWeb) {
+    runApp(const App());
+  } else {
+    runApp(const Web());
+  }
 }
+
+class Web extends StatelessWidget {
+  // ignore: use_key_in_widget_constructors
+  const Web();
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Computer Vision Laboratory',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: const MyWeb(),
+    );
+    //return const MaterialApp(home: MyWeb());
+  }
+}
+
+class MyWeb extends StatefulWidget {
+  // ignore: use_key_in_widget_constructors
+  const MyWeb();
+
+  @override
+  State<MyWeb> createState() => _MyWebState();
+}
+
+class _MyWebState extends State<MyWeb> {
+  final Storage storage = Storage();
+
+  /*Get list of files*/
+  late Future<Future<ListResult>> futureFiles;
+  late Future<ListResult> futureVidFiles;
+  late Future<ListResult> futureCSVFiles;
+
+  @override
+  void initState() {
+    super.initState();
+    futureVidFiles = FirebaseStorage.instance.ref('video').listAll();
+    futureCSVFiles = FirebaseStorage.instance.ref('orientation').listAll();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text('Computer Vision Laboratory'),
+          backgroundColor: Colors.redAccent,
+        ),
+        body: FutureBuilder<ListResult>(
+            future: futureVidFiles,
+            builder: ((context, snapshot) {
+              if (snapshot.hasData) {
+                final files = snapshot.data!.items;
+                return ListView.builder(
+                  itemCount: files.length,
+                  itemBuilder: (context, index) {
+                    final file = files[index];
+                    DateTime fileDate = DateTime.now();
+                    file.getMetadata().then((value) {
+                      fileDate = value.timeCreated!;
+                    });
+                    return ListTile(
+                      ///title: Text(
+                      ///DateFormat('dd MMMM yyyy, h:mm:ss').format(fileDate)),
+                      title: Text(file.name),
+                      trailing: IconButton(
+                          icon: const Icon(
+                            Icons.download,
+                            color: Colors.black,
+                          ), //downloadFile(file),
+                          onPressed: () async {
+                            await downloadFile(file);
+                          }),
+                    );
+                  },
+                );
+              } else if (snapshot.hasError) {
+                return const Center(child: Text("Error"));
+              } else {
+                return const Center(child: CircularProgressIndicator());
+              }
+            })));
+  }
+}
+
+Future<void> downloadFile(Reference ref) async {
+  // 1) set url
+  String downloadURL = await firebase_storage.FirebaseStorage.instance
+      .ref(ref.fullPath.toString())
+      .getDownloadURL();
+  // 2) request
+  // html.AnchorElement anchorElement =
+  //     html.AnchorElement(href: downloadURL, target = "_blank");
+  // anchorElement.download = downloadURL;
+  // anchorElement.click();
+
+  js.context.callMethod('open', [downloadURL]);
+}
+
+/*APP*/
 
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);

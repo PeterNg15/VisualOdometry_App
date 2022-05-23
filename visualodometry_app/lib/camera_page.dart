@@ -21,14 +21,6 @@ class CameraPage extends StatefulWidget {
   _CameraPageState createState() => _CameraPageState();
 }
 
-Future<void> deleteFile(File file) async {
-  try {
-    if (await file.exists()) {
-      await file.delete();
-    }
-  } catch (e) {}
-}
-
 class _CameraPageState extends State<CameraPage> {
   //Variables for the sensor
   @override
@@ -38,19 +30,12 @@ class _CameraPageState extends State<CameraPage> {
       interval: widget.interval,
       groupValue: widget.groupValue,
       //Camera stuff
-      color: Color.fromARGB(104, 0, 0, 0),
+      color: const Color.fromARGB(104, 0, 0, 0),
       onVideoRecorded: (value, csvPath) async {
-        print("test");
         final path = value.path;
         final Storage storage = Storage();
         storage.uploadFile(path, value.name);
-        // print('::::::::::::::::::::::::;; dkdkkd $path');
-        //Delete file afterwards
-        deleteFile(File(value.path));
-        // deleteFile(File(csvPath));
-
         //dispose();
-        ///Show video preview .mp4
       },
     );
     // return Container();

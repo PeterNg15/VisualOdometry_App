@@ -49,6 +49,9 @@ dependencies:
   icon_decoration: ^1.0.1
   intl: ^0.17.0
   csv: ^5.0.1
+  dio: ^4.0.6
+  http: ^0.13.0
+  universal_io: ^2.0.4
 
 # dependency_overrides:
 #   peter_flutter_camera:
