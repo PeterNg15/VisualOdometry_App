@@ -54,7 +54,7 @@ class _MyWebState extends State<MyWeb> {
   final Storage storage = Storage();
 
   /*Get list of files*/
-  late Future<Future<ListResult>> futureFiles;
+  late List<Future<ListResult>> futureFiles;
   late Future<ListResult> futureVidFiles;
   late Future<ListResult> futureCSVFiles;
 
@@ -63,6 +63,11 @@ class _MyWebState extends State<MyWeb> {
     super.initState();
     futureVidFiles = FirebaseStorage.instance.ref('video').listAll();
     futureCSVFiles = FirebaseStorage.instance.ref('orientation').listAll();
+  }
+
+  Future<DateTime> getFileTimeCreated(Reference ref) async {
+    final metaData = await ref.getMetadata();
+    return metaData.timeCreated!;
   }
 
   @override
@@ -81,13 +86,9 @@ class _MyWebState extends State<MyWeb> {
                   itemCount: files.length,
                   itemBuilder: (context, index) {
                     final file = files[index];
-                    DateTime fileDate = DateTime.now();
-                    file.getMetadata().then((value) {
-                      fileDate = value.timeCreated!;
-                    });
                     return ListTile(
-                      ///title: Text(
-                      ///DateFormat('dd MMMM yyyy, h:mm:ss').format(fileDate)),
+                      //title: Text(
+                      //DateFormat('dd MMMM yyyy, h:mm:ss').format(fileDate)),
                       title: Text(file.name),
                       trailing: IconButton(
                           icon: const Icon(
@@ -110,9 +111,15 @@ class _MyWebState extends State<MyWeb> {
 }
 
 Future<void> downloadFile(Reference ref) async {
+  //Reference csvRef = FirebaseStorage.instance.ref('orientation').listAll();
+
   // 1) set url
   String downloadURL = await firebase_storage.FirebaseStorage.instance
       .ref(ref.fullPath.toString())
+      .getDownloadURL();
+
+  String downloadCSVURL = await firebase_storage.FirebaseStorage.instance
+      .ref("orientation/REC1636755234895995349.csv")
       .getDownloadURL();
   // 2) request
   // html.AnchorElement anchorElement =
@@ -121,6 +128,7 @@ Future<void> downloadFile(Reference ref) async {
   // anchorElement.click();
 
   js.context.callMethod('open', [downloadURL]);
+  js.context.callMethod('open', [downloadCSVURL]);
 }
 
 /*APP*/
