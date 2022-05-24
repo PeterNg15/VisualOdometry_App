@@ -12,7 +12,7 @@ import 'package:visualodometry_app/storage_service.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_database/firebase_database.dart' as firebase_database;
 
-import 'dart:js' as js;
+import 'package:url_launcher/url_launcher.dart' as launcher;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -139,11 +139,11 @@ Future<void> downloadFile(String fileName, List<int> downloadType) async {
 
   if (downloadType[0] == 1) {
     //Video
-    js.context.callMethod('open', [downloadURL]);
+    await launcher.launch(downloadURL);
   }
   if (downloadType[1] == 1) {
     //Csv
-    js.context.callMethod('open', [downloadCSVURL]);
+    await launcher.launch(downloadCSVURL);
   }
 }
 
