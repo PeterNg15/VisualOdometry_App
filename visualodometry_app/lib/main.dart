@@ -2,7 +2,6 @@ import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:visualodometry_app/camera_page.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:motion_sensors/motion_sensors.dart';
 import 'package:vector_math/vector_math_64.dart' hide Colors;
@@ -11,16 +10,20 @@ import 'package:visualodometry_app/storage_service.dart';
 
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_database/firebase_database.dart' as firebase_database;
+import 'package:firebase_core/firebase_core.dart';
 
 import 'package:url_launcher/url_launcher.dart' as launcher;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  if (!kIsWeb) {
-    runApp(const App());
-  } else {
+  if (kIsWeb) {
+    await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform);
     runApp(const Web());
+  } else {
+    await Firebase.initializeApp(
+        name: 'from_main', options: DefaultFirebaseOptions.currentPlatform);
+    runApp(const App());
   }
 }
 
@@ -64,11 +67,6 @@ class _MyWebState extends State<MyWeb> {
     futureCSVFiles = FirebaseStorage.instance.ref('orientation').listAll();
   }
 
-  Future<DateTime> getFileTimeCreated(Reference ref) async {
-    final metaData = await ref.getMetadata();
-    return metaData.timeCreated!;
-  }
-
   @override
   Widget build(BuildContext context) {
     final dbRef = firebase_database.FirebaseDatabase.instance;
@@ -79,7 +77,7 @@ class _MyWebState extends State<MyWeb> {
         ),
         body: SafeArea(
             child: FirebaseAnimatedList(
-                query: dbRef.ref(),
+                query: dbRef.ref().orderByChild('TimeCreated'),
                 itemBuilder: (BuildContext context,
                     firebase_database.DataSnapshot snapshot,
                     Animation<double> animation,
