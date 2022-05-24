@@ -54,5 +54,8 @@
 	<false/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+	<!--Database-->
+	<key>DATABASE_URL</key>
+	<string>https://visualodometryapp-default-rtdb.firebaseio.com/</string>
 </dict>
 </plist>

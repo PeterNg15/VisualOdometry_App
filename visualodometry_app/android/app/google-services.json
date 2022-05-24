@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "1080851371364",
+    "firebase_url": "https://visualodometryapp-default-rtdb.firebaseio.com",
     "project_id": "visualodometryapp",
     "storage_bucket": "visualodometryapp.appspot.com"
   },
@@ -29,6 +30,13 @@
             {
               "client_id": "1080851371364-lv9f0k38lv9iv2ug4mpsc0c297h9mber.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "1080851371364-1srjinqc2htto8hvhjihue2g2pq3hqbt.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.visualodometryApp"
+              }
             }
           ]
         }

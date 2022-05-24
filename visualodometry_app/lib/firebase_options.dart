@@ -49,6 +49,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1080851371364',
     projectId: 'visualodometryapp',
     authDomain: 'visualodometryapp.firebaseapp.com',
+    databaseURL: 'https://visualodometryapp-default-rtdb.firebaseio.com',
     storageBucket: 'visualodometryapp.appspot.com',
     measurementId: 'G-CW7XXQNCVW',
   );
@@ -58,6 +59,7 @@ class DefaultFirebaseOptions {
     appId: '1:1080851371364:android:2223c7e454121b289ad671',
     messagingSenderId: '1080851371364',
     projectId: 'visualodometryapp',
+    databaseURL: 'https://visualodometryapp-default-rtdb.firebaseio.com',
     storageBucket: 'visualodometryapp.appspot.com',
   );
 
@@ -66,6 +68,7 @@ class DefaultFirebaseOptions {
     appId: '1:1080851371364:ios:f30f3be10109a5c39ad671',
     messagingSenderId: '1080851371364',
     projectId: 'visualodometryapp',
+    databaseURL: 'https://visualodometryapp-default-rtdb.firebaseio.com',
     storageBucket: 'visualodometryapp.appspot.com',
     iosClientId: '1080851371364-1srjinqc2htto8hvhjihue2g2pq3hqbt.apps.googleusercontent.com',
     iosBundleId: 'com.example.visualodometryApp',
@@ -76,6 +79,7 @@ class DefaultFirebaseOptions {
     appId: '1:1080851371364:ios:f30f3be10109a5c39ad671',
     messagingSenderId: '1080851371364',
     projectId: 'visualodometryapp',
+    databaseURL: 'https://visualodometryapp-default-rtdb.firebaseio.com',
     storageBucket: 'visualodometryapp.appspot.com',
     iosClientId: '1080851371364-1srjinqc2htto8hvhjihue2g2pq3hqbt.apps.googleusercontent.com',
     iosBundleId: 'com.example.visualodometryApp',

@@ -1,5 +1,4 @@
-import 'dart:html' as html;
-
+import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:visualodometry_app/camera_page.dart';
@@ -7,12 +6,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:motion_sensors/motion_sensors.dart';
 import 'package:vector_math/vector_math_64.dart' hide Colors;
-import 'package:flutter/foundation.dart'
-    show consolidateHttpClientResponseBytes, kIsWeb;
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:visualodometry_app/storage_service.dart';
 
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:intl/intl.dart';
+import 'package:firebase_database/firebase_database.dart' as firebase_database;
 
 import 'dart:js' as js;
 
@@ -35,6 +33,7 @@ class Web extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Computer Vision Laboratory',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.blue),
       home: const MyWeb(),
     );
@@ -72,63 +71,80 @@ class _MyWebState extends State<MyWeb> {
 
   @override
   Widget build(BuildContext context) {
+    final dbRef = firebase_database.FirebaseDatabase.instance;
     return Scaffold(
         appBar: AppBar(
           title: const Text('Computer Vision Laboratory'),
           backgroundColor: Colors.redAccent,
         ),
-        body: FutureBuilder<ListResult>(
-            future: futureVidFiles,
-            builder: ((context, snapshot) {
-              if (snapshot.hasData) {
-                final files = snapshot.data!.items;
-                return ListView.builder(
-                  itemCount: files.length,
-                  itemBuilder: (context, index) {
-                    final file = files[index];
-                    return ListTile(
-                      //title: Text(
-                      //DateFormat('dd MMMM yyyy, h:mm:ss').format(fileDate)),
-                      title: Text(file.name),
-                      trailing: IconButton(
+        body: SafeArea(
+            child: FirebaseAnimatedList(
+                query: dbRef.ref(),
+                itemBuilder: (BuildContext context,
+                    firebase_database.DataSnapshot snapshot,
+                    Animation<double> animation,
+                    int index) {
+                  var value = Map<String, dynamic>.from(snapshot.value as Map);
+                  return ListTile(
+                    subtitle: Text(value['FileName']),
+                    title: Text(value['TimeCreated']),
+                    trailing:
+                        Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
+                      IconButton(
+                          icon: const Icon(
+                            Icons.video_file,
+                            color: Colors.black,
+                          ),
+                          onPressed: () async {
+                            await downloadFile(value['FileName'], [1, 0]);
+                          }),
+                      IconButton(
+                          icon: const Icon(
+                            Icons.description,
+                            color: Colors.black,
+                          ),
+                          onPressed: () async {
+                            await downloadFile(value['FileName'], [0, 1]);
+                          }),
+                      IconButton(
                           icon: const Icon(
                             Icons.download,
                             color: Colors.black,
-                          ), //downloadFile(file),
+                          ),
                           onPressed: () async {
-                            await downloadFile(file);
+                            await downloadFile(value['FileName'], [1, 1]);
                           }),
-                    );
-                  },
-                );
-              } else if (snapshot.hasError) {
-                return const Center(child: Text("Error"));
-              } else {
-                return const Center(child: CircularProgressIndicator());
-              }
-            })));
+                      IconButton(
+                          icon: const Icon(
+                            Icons.delete,
+                            color: Colors.black,
+                          ),
+                          onPressed: () async {
+                            //delete file from database and storage
+                          }),
+                    ]),
+                  );
+                })));
   }
 }
 
-Future<void> downloadFile(Reference ref) async {
-  //Reference csvRef = FirebaseStorage.instance.ref('orientation').listAll();
-
-  // 1) set url
+Future<void> downloadFile(String fileName, List<int> downloadType) async {
   String downloadURL = await firebase_storage.FirebaseStorage.instance
-      .ref(ref.fullPath.toString())
+      .ref("video/$fileName.mp4")
       .getDownloadURL();
 
   String downloadCSVURL = await firebase_storage.FirebaseStorage.instance
-      .ref("orientation/REC1636755234895995349.csv")
+      .ref("orientation/$fileName.csv")
       .getDownloadURL();
-  // 2) request
-  // html.AnchorElement anchorElement =
-  //     html.AnchorElement(href: downloadURL, target = "_blank");
-  // anchorElement.download = downloadURL;
-  // anchorElement.click();
 
-  js.context.callMethod('open', [downloadURL]);
-  js.context.callMethod('open', [downloadCSVURL]);
+  if (downloadType[0] == 1) {
+    //Video
+    js.context.callMethod('open', [downloadURL]);
+  }
+  if (downloadType[1] == 1) {
+    //Csv
+    js.context.callMethod('open', [downloadCSVURL]);
+  }
 }
 
 /*APP*/
@@ -139,7 +155,12 @@ class App extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: MyApp());
+    return MaterialApp(
+      title: 'Computer Vision Laboratory',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: const MyApp(),
+    );
   }
 }
 
