@@ -77,7 +77,7 @@ class _MyWebState extends State<MyWeb> {
         ),
         body: SafeArea(
             child: FirebaseAnimatedList(
-                query: dbRef.ref().orderByChild('TimeCreated'),
+                query: dbRef.ref("files").orderByChild('Order'),
                 itemBuilder: (BuildContext context,
                     firebase_database.DataSnapshot snapshot,
                     Animation<double> animation,
