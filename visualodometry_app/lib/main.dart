@@ -55,16 +55,9 @@ class MyWeb extends StatefulWidget {
 class _MyWebState extends State<MyWeb> {
   final Storage storage = Storage();
 
-  /*Get list of files*/
-  late List<Future<ListResult>> futureFiles;
-  late Future<ListResult> futureVidFiles;
-  late Future<ListResult> futureCSVFiles;
-
   @override
   void initState() {
     super.initState();
-    futureVidFiles = FirebaseStorage.instance.ref('video').listAll();
-    futureCSVFiles = FirebaseStorage.instance.ref('orientation').listAll();
   }
 
   @override
@@ -119,6 +112,7 @@ class _MyWebState extends State<MyWeb> {
                           ),
                           onPressed: () async {
                             //delete file from database and storage
+                            await deleteFile(value['FileName'], snapshot.key);
                           }),
                     ]),
                   );
@@ -143,6 +137,15 @@ Future<void> downloadFile(String fileName, List<int> downloadType) async {
     //Csv
     await launcher.launch(downloadCSVURL);
   }
+}
+
+Future<void> deleteFile(String fileName, dynamic keys) async {
+  //Delete from firebase RTDB
+  firebase_database.FirebaseDatabase.instance.ref("files").child(keys).remove();
+  //Delete mp4
+  firebase_storage.FirebaseStorage.instance.ref("video/$fileName.mp4").delete();
+  //Delete csv
+  firebase_storage.FirebaseStorage.instance.ref("video/$fileName.csv").delete();
 }
 
 /*APP*/
@@ -188,21 +191,25 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     motionSensors.gyroscope.listen((GyroscopeEvent event) {
+      if (!mounted) return;
       setState(() {
         _gyroscope.setValues(event.x, event.y, event.z);
       });
     });
     motionSensors.accelerometer.listen((AccelerometerEvent event) {
+      if (!mounted) return;
       setState(() {
         _accelerometer.setValues(event.x, event.y, event.z);
       });
     });
     motionSensors.userAccelerometer.listen((UserAccelerometerEvent event) {
+      if (!mounted) return;
       setState(() {
         _userAaccelerometer.setValues(event.x, event.y, event.z);
       });
     });
     motionSensors.magnetometer.listen((MagnetometerEvent event) {
+      if (!mounted) return;
       setState(() {
         _magnetometer.setValues(event.x, event.y, event.z);
         var matrix =
@@ -211,6 +218,7 @@ class _MyAppState extends State<MyApp> {
       });
     });
     motionSensors.isOrientationAvailable().then((available) {
+      if (!mounted) return;
       if (available) {
         motionSensors.orientation.listen((OrientationEvent event) {
           setState(() {
@@ -220,11 +228,13 @@ class _MyAppState extends State<MyApp> {
       }
     });
     motionSensors.absoluteOrientation.listen((AbsoluteOrientationEvent event) {
+      if (!mounted) return;
       setState(() {
         _absoluteOrientation.setValues(event.yaw, event.pitch, event.roll);
       });
     });
     motionSensors.screenOrientation.listen((ScreenOrientationEvent event) {
+      if (!mounted) return;
       setState(() {
         _screenOrientation = event.angle;
       });
@@ -232,6 +242,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void setUpdateInterval(int? groupValue, int interval) {
+    if (!mounted) return;
     motionSensors.accelerometerUpdateInterval = interval;
     motionSensors.userAccelerometerUpdateInterval = interval;
     motionSensors.magnetometerUpdateInterval = interval;
@@ -263,7 +274,7 @@ class _MyAppState extends State<MyApp> {
                   value: 1,
                   groupValue: _groupValue,
                   onChanged: (dynamic value) => setUpdateInterval(
-                      value, Duration.microsecondsPerSecond ~/ 1),
+                      value, (Duration.microsecondsPerSecond ~/ 1)),
                 ),
                 const Text("1 FPS"),
                 Radio(
