@@ -121,21 +121,25 @@ class _MyWebState extends State<MyWeb> {
 }
 
 Future<void> downloadFile(String fileName, List<int> downloadType) async {
-  String downloadURL = await firebase_storage.FirebaseStorage.instance
-      .ref("video/$fileName.mp4")
-      .getDownloadURL();
+  try {
+    String downloadURL = await firebase_storage.FirebaseStorage.instance
+        .ref("video/$fileName.mp4")
+        .getDownloadURL();
 
-  String downloadCSVURL = await firebase_storage.FirebaseStorage.instance
-      .ref("orientation/$fileName.csv")
-      .getDownloadURL();
+    String downloadCSVURL = await firebase_storage.FirebaseStorage.instance
+        .ref("orientation/$fileName.csv")
+        .getDownloadURL();
 
-  if (downloadType[0] == 1) {
-    //Video
-    await launcher.launch(downloadURL);
-  }
-  if (downloadType[1] == 1) {
-    //Csv
-    await launcher.launch(downloadCSVURL);
+    if (downloadType[0] == 1) {
+      //Video
+      await launcher.launch(downloadURL);
+    }
+    if (downloadType[1] == 1) {
+      //Csv
+      await launcher.launch(downloadCSVURL);
+    }
+  } catch (e) {
+    //do nothing
   }
 }
 
