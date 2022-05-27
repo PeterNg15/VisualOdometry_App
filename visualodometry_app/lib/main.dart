@@ -77,8 +77,8 @@ class _MyWebState extends State<MyWeb> {
                     int index) {
                   var value = Map<String, dynamic>.from(snapshot.value as Map);
                   return ListTile(
-                    subtitle: Text(value['FileName']),
-                    title: Text(value['TimeCreated']),
+                    subtitle: SelectableText(value['FileName']),
+                    title: SelectableText(value['TimeCreated']),
                     trailing:
                         Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
                       IconButton(
